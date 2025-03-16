@@ -132,7 +132,7 @@ public class App {
             long inicio = System.nanoTime();
             codigo4(tamanhosTeste[i]);
             duracao = (System.nanoTime() - inicio) * nanoToMilli;
-            System.out.printf("Tamanho: %,2d | Operações: %,2d | Tempo: %,2f ms", tamanhosTeste[i], operacoes, duracao);
+            System.out.printf("Tamanho: %,2d | Operações: %,2d | Tempo: %,2f ms\n", tamanhosTeste[i], operacoes, duracao);
         }
     }
 }
