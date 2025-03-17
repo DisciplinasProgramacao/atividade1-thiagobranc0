@@ -116,25 +116,31 @@ public class App {
     }
     public static void marcarTempo(int[] vetor, Consumer funcao) {
         long inicio = System.nanoTime();
-        marcarTempo(vetor, funcao);
+        funcao.accept(vetor);
         duracao = (System.nanoTime() - inicio) * nanoToMilli;
     }
     public static String executarTeste(int[] vetor, Consumer funcao) {
-        marcarTempo(vetor);
+        marcarTempo(vetor, funcao);
         return String.format("Tamanho: %,2d | Operações: %,2d | Tempo: %,2f ms", vetor.length, operacoes, duracao);
     }
     public static void main(String[] args) {
-       int[] tamanhosTeste = tamanhosTestePequeno;
-       Consumer<int[]> funcao = App::codigo1;
-       for(int i = 0; i < tamanhosTeste.length; i++){
-           int[] vetorDados = gerarVetor(tamanhosTeste[i]);
-           System.out.println(executarTeste(vetorDados));
-       }
+        int[] tamanhoTeste = tamanhosTestePequeno;
+        Consumer<int[]> funcao = App::codigo1;
+
+        for (int i = 0; i < tamanhoTeste.length; i++) {
+            int[] vetor = gerarVetor(tamanhoTeste[i]);
+            executarTeste(vetor, funcao);
+            funcao = App::codigo2;
+            executarTeste(vetor, funcao);
+            funcao = App::codigo3;
+            executarTeste(vetor, funcao);
+        }
+
 //        for (int i = 0; i < tamanhosTeste.length; i++) {
 //            long inicio = System.nanoTime();
 //            codigo4(tamanhosTeste[i]);
 //            duracao = (System.nanoTime() - inicio) * nanoToMilli;
 //            System.out.printf("Tamanho: %,2d | Operações: %,2d | Tempo: %,2f ms\n", tamanhosTeste[i], operacoes, duracao);
 //        }
-//    }
+    }
 }
