@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.function.Consumer;
 
 /** 
  * MIT License
@@ -113,26 +114,27 @@ public class App {
         return vetor;
         
     }
-    public static void marcarTempo(int[] vetor) {
+    public static void marcarTempo(int[] vetor, Consumer funcao) {
         long inicio = System.nanoTime();
-        codigo3(vetor);
+        marcarTempo(vetor, funcao);
         duracao = (System.nanoTime() - inicio) * nanoToMilli;
     }
-    public static String executarTeste(int[] vetor) {
+    public static String executarTeste(int[] vetor, Consumer funcao) {
         marcarTempo(vetor);
         return String.format("Tamanho: %,2d | Operações: %,2d | Tempo: %,2f ms", vetor.length, operacoes, duracao);
     }
     public static void main(String[] args) {
        int[] tamanhosTeste = tamanhosTestePequeno;
-//       for(int i = 0; i < tamanhosTeste.length; i++){
-//           int[] vetorDados = gerarVetor(tamanhosTeste[i]);
-//           System.out.println(executarTeste(vetorDados));
-//       }
-        for (int i = 0; i < tamanhosTeste.length; i++) {
-            long inicio = System.nanoTime();
-            codigo4(tamanhosTeste[i]);
-            duracao = (System.nanoTime() - inicio) * nanoToMilli;
-            System.out.printf("Tamanho: %,2d | Operações: %,2d | Tempo: %,2f ms\n", tamanhosTeste[i], operacoes, duracao);
-        }
-    }
+       Consumer<int[]> funcao = App::codigo1;
+       for(int i = 0; i < tamanhosTeste.length; i++){
+           int[] vetorDados = gerarVetor(tamanhosTeste[i]);
+           System.out.println(executarTeste(vetorDados));
+       }
+//        for (int i = 0; i < tamanhosTeste.length; i++) {
+//            long inicio = System.nanoTime();
+//            codigo4(tamanhosTeste[i]);
+//            duracao = (System.nanoTime() - inicio) * nanoToMilli;
+//            System.out.printf("Tamanho: %,2d | Operações: %,2d | Tempo: %,2f ms\n", tamanhosTeste[i], operacoes, duracao);
+//        }
+//    }
 }
