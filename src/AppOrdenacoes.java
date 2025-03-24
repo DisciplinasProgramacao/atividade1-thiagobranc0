@@ -18,9 +18,18 @@ public class AppOrdenacoes {
 
     public static void main(String[] args){
         Integer[] vetor = gerarVetor(100_000);
-        Bubblesort<Integer> ordernador = new Bubblesort<Integer>();
+        IOrdenador<Integer> ordernador = new Bubblesort<Integer>();
         Integer[] vetorOrdenado = ordernador.ordenar(vetor);
 
+        System.out.println("Bolha:");
+        System.out.println(vetor.length);
+        System.out.println(ordernador.getComparacoes());
+        System.out.println(ordernador.getMovimentacoes());
+        System.out.println(ordernador.getTempoOrdenacao());
+
+        System.out.println("Inserção:");
+        ordernador = new Insercao<Integer>();
+        ordernador.ordenar(vetor);
         System.out.println(vetor.length);
         System.out.println(ordernador.getComparacoes());
         System.out.println(ordernador.getMovimentacoes());
