@@ -1,6 +1,7 @@
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Insercao  <T extends Comparable<T>> implements IOrdenador<T> {
     private long comparacoes;
@@ -8,6 +9,11 @@ public class Insercao  <T extends Comparable<T>> implements IOrdenador<T> {
     LocalDateTime inicio, fim;
     @Override
     public T[] ordenar(T[] dados) {
+        return ordenar(dados, T::compareTo);
+    }
+
+    @Override
+    public T[] ordenar(T[] dados, Comparator<T> comparador) {
         T[] copiaDados = Arrays.copyOf(dados, dados.length);
         int tamanho = copiaDados.length;
         comparacoes = movimentacoes = 0;
@@ -16,7 +22,7 @@ public class Insercao  <T extends Comparable<T>> implements IOrdenador<T> {
             T valor = copiaDados[posReferencia];
             int j = posReferencia - 1;
             comparacoes++;
-            while(j >= 0 && valor.compareTo(copiaDados[j]) < 0) {
+            while(j >= 0 && comparador.compare(valor, copiaDados[j]) < 0) {
                 j--;
                 comparacoes++;
             }
