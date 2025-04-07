@@ -1,6 +1,8 @@
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
+
 public class Mergesort<T extends Comparable<T>> implements IOrdenador<T>{
     private long comparacoes;
     private long movimentacoes;
@@ -11,25 +13,34 @@ public class Mergesort<T extends Comparable<T>> implements IOrdenador<T>{
         comparacoes = 0;
         movimentacoes = 0;
     }
+
     @Override
     public T[] ordenar(T[] dados) {
+        return ordenar(dados, T::compareTo);
+    }
+
+    //comparador adicionado no parâmetro de merge e mergesort
+    @Override
+    public T[] ordenar(T[] dados, Comparator<T> comparador) {
         int tamanho = dados.length;
         dadosOrdenados = Arrays.copyOf(dados, tamanho);
         inicio = LocalDateTime.now();
-        mergesort(0, tamanho-1);
+        mergesort(0, tamanho-1, comparador);
         termino = LocalDateTime.now();
         return dadosOrdenados;
     }
-    private T[] mergesort(int ini, int fim){
+
+    private T[] mergesort(int ini, int fim, Comparator<T> comparador){
         if(ini < fim){
             int meio = (fim+ini)/2;
-            mergesort(ini, meio );
-            mergesort(meio+1, fim);
-            dadosOrdenados = merge(ini, fim, dadosOrdenados);
+            mergesort(ini, meio,comparador );
+            mergesort(meio+1, fim, comparador);
+            dadosOrdenados = merge(ini, fim, dadosOrdenados, comparador);
         }
         return dadosOrdenados;
     }
-    private T[] merge(int inicio, int fim, T[] dados){
+    //lógica de comparção alterada para ficar genérica
+    private T[] merge(int inicio, int fim, T[] dados, Comparator<T> comparador){
         T[] novo = Arrays.copyOf(dados, dados.length);
         int meio = (inicio+fim)/2;
         int indice1 = inicio;
@@ -37,11 +48,16 @@ public class Mergesort<T extends Comparable<T>> implements IOrdenador<T>{
         int pos = inicio;
         while(indice1 <= meio && indice2 <= fim){
             comparacoes++;
-            if(dados[indice1].compareTo(dados[indice2]) <=0)
+            if(comparador.compare(dados[indice1],dados[indice2]) <= 0)
                 novo[pos] = dados[indice1++];
             else
                 novo[pos] = dados[indice2++];
             pos++;
+//            if(dados[indice1].compareTo(dados[indice2]) <=0)
+//                novo[pos] = dados[indice1++];
+//            else
+//                novo[pos] = dados[indice2++];
+//            pos++;
             movimentacoes++;
         }
         int origem = indice1;

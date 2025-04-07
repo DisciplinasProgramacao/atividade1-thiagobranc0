@@ -88,7 +88,8 @@ public class AppOficina {
     static int exibirMenuOrdenadores() {
         cabecalho();
         System.out.println("1 - Bolha");
-        System.out.println("2 - Inserção");     
+        System.out.println("2 - Inserção");
+        System.out.println("3 - Merge");
         System.out.println("0 - Finalizar");
        
         return lerNumero("Digite sua opção", Integer.class);
@@ -98,6 +99,7 @@ public class AppOficina {
         cabecalho();
         System.out.println("1 - Bolha");
         System.out.println("2 - Inserção");
+        System.out.println("3 - Merge");
         System.out.println("0 - Finalizar");
 
         return lerNumero("Digite sua opção", Integer.class);
@@ -173,7 +175,8 @@ public class AppOficina {
 
         switch (opcao) {
             case 1 -> ordenador = new Bubblesort<>();
-            case 2 -> ordenador = new InsertSort<>();
+            case 2 -> ordenador = new Insercao<>();
+            case 3 -> ordenador = new Mergesort<>();
         }
 
         switch (ordenacao){
