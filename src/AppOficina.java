@@ -154,7 +154,7 @@ public class AppOficina {
     static Produto localizarProdutoPorDescricao() {
         cabecalho();
         Scanner descricao = new Scanner(System.in);
-        System.out.println("Localizando um produto");
+        System.out.println("Localizando um produto por descrição");
         descricao.nextLine();
         Produto localizado = null;
 
