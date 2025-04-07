@@ -36,6 +36,8 @@ public class AppOficina {
 
     static final int MAX_PEDIDOS = 100;
     static Produto[] produtos;
+    static Produto[] produtosOrdenadosPorCodigo;
+    static Produto[] produtosOrdenadosPorDescricao;
     static int quantProdutos = 0;
     static String nomeArquivoDados = "produtos.txt";
     static IOrdenador<Produto> ordenador;
@@ -76,11 +78,12 @@ public class AppOficina {
     static int exibirMenuPrincipal() {
         cabecalho();
         System.out.println("1 - Procurar produto");
-        System.out.println("2 - Filtrar produtos por preço máximo");
-        System.out.println("3 - Ordenar produtos");
-        System.out.println("4 - Embaralhar produtos");
-        System.out.println("5 - Listar produtos");
-        System.out.println("0 - Finalizar");
+        System.out.println("2 - Procurar produto por descricao");
+        System.out.println("3 - Filtrar produtos por preço máximo");
+        System.out.println("4 - Ordenar produtos");
+        System.out.println("5 - Embaralhar produtos");
+        System.out.println("6 - Listar produtos");
+        System.out.println("7 - Finalizar");
        
         return lerNumero("Digite sua opção", Integer.class);
     }
@@ -95,12 +98,11 @@ public class AppOficina {
         return lerNumero("Digite sua opção", Integer.class);
     }
 
-    static int exibirMenuOrdenadacao() {
+    static int exibirMenuOrdenacao() {
         cabecalho();
-        System.out.println("1 - Bolha");
-        System.out.println("2 - Inserção");
-        System.out.println("3 - Merge");
-        System.out.println("0 - Finalizar");
+        System.out.println("1 - Ordem Alfabética");
+        System.out.println("2 - Comparar por valor");
+        System.out.println("3 - Comparar por valor com desempate alfabético");
 
         return lerNumero("Digite sua opção", Integer.class);
     }
@@ -121,6 +123,12 @@ public class AppOficina {
                 dadosCarregados[quantProdutos] = novoProduto;
                 quantProdutos++;
             }
+            IOrdenador ordenador = new Bubblesort();
+            Comparator<Produto> comparandoPorcodigo = new ComparadorPorCodigo();
+            produtosOrdenadosPorCodigo = Arrays.copyOf(dadosCarregados, dadosCarregados.length);
+            produtosOrdenadosPorDescricao = Arrays.copyOf(dadosCarregados, dadosCarregados.length);
+            produtosOrdenadosPorCodigo = (Produto[]) ordenador.ordenar(produtosOrdenadosPorCodigo, comparandoPorcodigo);
+            produtosOrdenadosPorDescricao = (Produto[]) ordenador.ordenar(produtosOrdenadosPorDescricao);
             dados.close();
         }catch (FileNotFoundException fex){
             System.out.println("Arquivo não encontrado. Produtos não carregados");
@@ -139,6 +147,20 @@ public class AppOficina {
         for (int i = 0; i < quantProdutos && localizado == null; i++) {
             if (produtos[i].hashCode() == numero)
                 localizado = produtos[i];
+        }
+        return localizado;
+    }
+
+    static Produto localizarProdutoPorDescricao() {
+        cabecalho();
+        Scanner descricao = new Scanner(System.in);
+        System.out.println("Localizando um produto");
+        descricao.nextLine();
+        Produto localizado = null;
+
+        for (int i = 0; i < quantProdutos && localizado == null; i++) {
+            if (descricao.equals(produtosOrdenadosPorDescricao[i].descricao))
+                localizado = produtosOrdenadosPorDescricao[i];
         }
         return localizado;
     }
@@ -171,7 +193,7 @@ public class AppOficina {
 
         Comparator<Produto> comp = null;
         int opcao = exibirMenuOrdenadores();
-        int ordenacao = exibirMenuOrdenadores();
+        int ordenacao = exibirMenuOrdenacao();
 
         switch (opcao) {
             case 1 -> ordenador = new Bubblesort<>();
@@ -182,6 +204,7 @@ public class AppOficina {
         switch (ordenacao){
             case 1 -> comp = Produto::compareTo;
             case 2 -> comp = new ComparadorPorValor();
+            case 3 -> comp = new ComparadorPorValorComDesempate();
         }
 
         if(ordenador!=null){
@@ -222,10 +245,11 @@ public class AppOficina {
             opcao = exibirMenuPrincipal();
             switch (opcao) {
                 case 1 -> mostrarProduto(localizarProduto());
-                case 2 -> filtrarPorPrecoMaximo();
-                case 3 -> ordenarProdutos();
-                case 4 -> embaralharProdutos();
-                case 5 -> listarProdutos();
+                case 2 -> localizarProdutoPorDescricao();
+                case 3 -> filtrarPorPrecoMaximo();
+                case 4 -> ordenarProdutos();
+                case 5 -> embaralharProdutos();
+                case 6 -> listarProdutos();
                 case 0 -> System.out.println("FLW VLW OBG VLT SMP.");
             }
             pausa();
